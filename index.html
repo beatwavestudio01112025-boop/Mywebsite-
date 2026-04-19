@@ -5,7 +5,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Login</title>
+<title>Customer Login</title>
 
 <style>
 
@@ -17,8 +17,6 @@ font-family:sans-serif;
 
 background:#0f172a;
 
-color:white;
-
 display:flex;
 
 justify-content:center;
@@ -26,6 +24,8 @@ justify-content:center;
 align-items:center;
 
 min-height:100vh;
+
+color:white;
 
 }
 
@@ -43,6 +43,30 @@ width:90%;
 max-width:400px;
 
 text-align:center;
+
+box-shadow:0 0 20px rgba(0,0,0,0.4);
+
+}
+
+
+h2{
+
+margin-top:0;
+
+}
+
+
+input,select{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border-radius:8px;
+
+border:none;
 
 }
 
@@ -65,20 +89,7 @@ color:white;
 
 font-size:15px;
 
-}
-
-
-input,select{
-
-width:100%;
-
-padding:12px;
-
-margin-top:10px;
-
-border-radius:8px;
-
-border:none;
+cursor:pointer;
 
 }
 
@@ -94,7 +105,7 @@ border-radius:8px;
 }
 
 
-#dashboard,#profileBox{
+#profilePage,#dashboard{
 
 display:none;
 
@@ -109,38 +120,42 @@ display:none;
 <body>
 
 
+
 <div class="card" id="loginPage">
 
 
 <h2>Customer Login</h2>
 
 
-<div id="recaptcha-container"></div>
+<input placeholder="Username" id="username">
 
 
-<input placeholder="Mobile Number" id="mobile">
+<input type="password" placeholder="Password" id="password">
 
 
-<button onclick="sendOtp()">Send OTP</button>
+<button onclick="login()">Login</button>
 
 
-<input placeholder="Enter OTP" id="otp">
+<p style="font-size:13px;opacity:0.7">
 
+Demo login:
 
-<button onclick="verifyOtp()">Login</button>
+user / 1234
+
+</p>
 
 
 </div>
 
 
 
-<div class="card" id="profileBox">
+<div class="card" id="profilePage">
 
 
-<h3>Complete Profile</h3>
+<h2>Complete Profile</h2>
 
 
-<input placeholder="Name" id="name">
+<input placeholder="Full Name" id="name">
 
 
 <select id="gender">
@@ -187,9 +202,9 @@ display:none;
 
 Photo Editing – ₹50<br>
 
-Poster – ₹80<br>
+Poster Design – ₹80<br>
 
-Video – ₹150
+Video Editing – ₹150
 
 
 <br><br>
@@ -214,95 +229,43 @@ UPI:
 
 
 
-<script type="module">
+<script>
 
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-
-import {
-
-getAuth,
-
-RecaptchaVerifier,
-
-signInWithPhoneNumber
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+function login(){
 
 
-const firebaseConfig = {
+let user=document.getElementById("username").value;
 
-apiKey: "AIzaSyD3Sic-eaghlnzJr8AGVyoVNOtHvbyO1L0",
-
-authDomain: "digital-services-otp.firebaseapp.com",
-
-projectId: "digital-services-otp",
-
-appId: "1:469449627733:web:609b68c8cfddd260859cdc"
-
-};
+let pass=document.getElementById("password").value;
 
 
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-
-window.recaptchaVerifier =
-
-new RecaptchaVerifier(auth,'recaptcha-container',{});
-
-
-window.sendOtp=function(){
-
-
-const number="+91"+document.getElementById("mobile").value;
-
-
-signInWithPhoneNumber(auth,number,window.recaptchaVerifier)
-
-.then(result=>{
-
-
-window.confirmationResult=result;
-
-
-alert("OTP sent");
-
-
-});
-
-
-}
-
-
-window.verifyOtp=function(){
-
-
-confirmationResult.confirm(
-
-document.getElementById("otp").value
-
-)
-
-.then(()=>{
+if(user=="user" && pass=="1234"){
 
 
 document.getElementById("loginPage").style.display="none";
 
 
-document.getElementById("profileBox").style.display="block";
-
-
-});
+document.getElementById("profilePage").style.display="block";
 
 
 }
 
 
-window.saveProfile=function(){
+else{
+
+
+alert("Wrong login");
+
+
+}
+
+
+}
+
+
+
+function saveProfile(){
 
 
 let name=document.getElementById("name").value;
@@ -312,7 +275,7 @@ let gender=document.getElementById("gender").value;
 let age=document.getElementById("age").value;
 
 
-document.getElementById("profileBox").style.display="none";
+document.getElementById("profilePage").style.display="none";
 
 
 document.getElementById("dashboard").style.display="block";
@@ -343,6 +306,7 @@ reader.readAsDataURL(file);
 
 
 </script>
+
 
 
 </body>
