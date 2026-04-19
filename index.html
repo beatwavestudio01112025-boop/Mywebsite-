@@ -1,156 +1,377 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
 
-<title>Professional Digital Services</title>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Digital Services</title>
 
 <style>
 
 body{
+
 margin:0;
-font-family:Arial, sans-serif;
-background:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');
+font-family:sans-serif;
+
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url("https://images.unsplash.com/photo-1492724441997-5dc865305da7");
+
 background-size:cover;
-background-position:center;
+
 color:white;
-}
 
-.overlay{
-background:rgba(0,0,0,0.65);
-min-height:100vh;
-padding:30px;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-text-align:center;
-}
-
-h1{
-font-size:40px;
-}
-
-.btn{
-display:inline-block;
-margin:10px;
-padding:12px 25px;
-background:#00bcd4;
-color:white;
-text-decoration:none;
-border-radius:6px;
-font-size:18px;
-}
-
-.gallery{
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
-margin-top:30px;
+align-items:center;
+
+min-height:100vh;
+
 }
 
-.gallery img{
-width:250px;
-margin:10px;
+.card{
+
+background:rgba(255,255,255,0.08);
+
+padding:25px;
+
+border-radius:15px;
+
+width:92%;
+max-width:420px;
+
+backdrop-filter:blur(10px);
+
+text-align:center;
+
+}
+
+button{
+
+width:100%;
+
+padding:13px;
+
+margin-top:12px;
+
+border:none;
+
+border-radius:8px;
+
+background:#00c2cb;
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+}
+
+input,select{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border-radius:8px;
+
+border:none;
+
+}
+
+img{
+
+width:100%;
+
 border-radius:10px;
+
+margin-top:10px;
+
 }
 
-.section{
-margin-top:40px;
+#photos,#profileBox,#dashboard{
+
+display:none;
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<div class="overlay">
 
-<div class="container">
-
-<h1>Professional Digital Services</h1>
-
-<p>Photo Editing | Video Editing | Poster Design</p>
+<div class="card">
 
 
-<!-- Instagram -->
-<div class="section">
+<h2>Professional Digital Services</h2>
 
-<a class="btn" href="https://www.instagram.com/_love__tune__?igsh=OXhmanBmanJ5djlk" target="_blank">
-Open Instagram Page
+
+<a href="https://www.instagram.com/_love__tune__">
+
+<button>Instagram Portfolio</button>
+
 </a>
 
-</div>
 
 
-<!-- Photos -->
-<div class="section">
+<h3>Sample Pics</h3>
 
-<h2>My Edited Photos</h2>
+<button onclick="showPhotos()">View Sample</button>
 
-<div class="gallery">
+
+<div id="photos">
 
 <img src="photo1.jpg">
+
 <img src="photo2.jpg">
+
 <img src="photo3.jpg">
 
 </div>
 
-</div>
 
 
-<!-- WhatsApp -->
-<div class="section">
+<h3>Price</h3>
 
-<a class="btn" href="https://wa.me/918056760167">
-Contact WhatsApp
+Photo – ₹50<br>
+Poster – ₹80<br>
+Video – ₹150
+
+
+
+<a href="https://wa.me/918056760167">
+
+<button>WhatsApp</button>
+
 </a>
 
+
+
+<h3>UPI</h3>
+
+8056760167@superyes
+
+
+
+<hr>
+
+
+
+<h3>Login</h3>
+
+
+<div id="recaptcha"></div>
+
+
+<input placeholder="Mobile Number" id="mobile">
+
+
+<button onclick="sendOtp()">Send OTP</button>
+
+
+<input placeholder="Enter OTP" id="otp">
+
+
+<button onclick="verifyOtp()">Verify</button>
+
+
+
+<div id="profileBox">
+
+
+<h3>Profile</h3>
+
+
+<input placeholder="Name" id="name">
+
+
+<select id="gender">
+
+<option>Gender</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+</select>
+
+
+<input placeholder="Age" id="age">
+
+
+<input type="file" id="photo">
+
+
+<button onclick="saveProfile()">Save</button>
+
+
 </div>
 
 
-<!-- Payment -->
-<div class="section">
 
-<a class="btn" href="upi://pay?pa=8056760167@superyes">
-Pay via UPI
-</a>
+<div id="dashboard">
+
+
+<h3>Dashboard</h3>
+
+
+<div id="userData"></div>
+
+
+<img id="profilePic">
+
 
 </div>
 
 
-<p>© 2026 Digital Services</p>
 
 </div>
 
-</div>
+
+
+<script type="module">
+
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+
+import {
+
+getAuth,
+
+RecaptchaVerifier,
+
+signInWithPhoneNumber
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyD3Sic-eaghlnzJr8AGVyoVNOtHvbyO1L0",
+
+authDomain: "digital-services-otp.firebaseapp.com",
+
+projectId: "digital-services-otp",
+
+storageBucket: "digital-services-otp.firebasestorage.app",
+
+messagingSenderId: "469449627733",
+
+appId: "1:469449627733:web:609b68c8cfddd260859cdc"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha',{});
+
+
+window.sendOtp=function(){
+
+
+const number="+91"+document.getElementById("mobile").value;
+
+
+signInWithPhoneNumber(auth,number,window.recaptchaVerifier)
+
+.then(result=>{
+
+
+window.confirmationResult=result;
+
+
+alert("OTP sent");
+
+
+});
+
+
+}
+
+
+window.verifyOtp=function(){
+
+
+const otp=document.getElementById("otp").value;
+
+
+confirmationResult.confirm(otp)
+
+.then(()=>{
+
+
+document.getElementById("profileBox").style.display="block";
+
+
+alert("Login success");
+
+
+});
+
+
+}
+
+
+window.showPhotos=function(){
+
+document.getElementById("photos").style.display="block";
+
+}
+
+
+window.saveProfile=function(){
+
+
+let name=document.getElementById("name").value;
+
+let gender=document.getElementById("gender").value;
+
+let age=document.getElementById("age").value;
+
+
+document.getElementById("dashboard").style.display="block";
+
+
+document.getElementById("userData").innerHTML=
+
+name+"<br>"+gender+"<br>"+age;
+
+
+let file=document.getElementById("photo").files[0];
+
+
+let reader=new FileReader();
+
+
+reader.onload=function(e){
+
+document.getElementById("profilePic").src=e.target.result;
+
+}
+
+
+reader.readAsDataURL(file);
+
+
+}
+
+
+</script>
+
 
 </body>
+
 </html>
-
-<h2>Fees Details</h2>
-
-<ul style="text-align:left; display:inline-block;">
-<li>Photo Editing – ₹50</li>
-<li>Poster Design – ₹80</li>
-<li>Video Editing – ₹150</li>
-<li>Thumbnail Design – ₹40</li>
-</ul>
-<h2>Sample Pics</h2>
-
-<button onclick="showPhotos()">View Sample Pics</button>
-
-<div id="photos" style="display:none; margin-top:20px;">
-  <img src="sample1.jpg" width="250">
-  <img src="sample2.jpg" width="250">
-  <img src="sample3.jpg" width="250">
-</div>
-
-<script>
-function showPhotos() {
-  document.getElementById("photos").style.display = "block";
-}
-</script>
