@@ -5,53 +5,53 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Digital Services</title>
+<title>Login</title>
 
 <style>
 
 body{
 
 margin:0;
+
 font-family:sans-serif;
 
-background:
-linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
-url("https://images.unsplash.com/photo-1492724441997-5dc865305da7");
-
-background-size:cover;
+background:#0f172a;
 
 color:white;
 
 display:flex;
+
 justify-content:center;
+
 align-items:center;
 
 min-height:100vh;
 
 }
 
+
 .card{
 
-background:rgba(255,255,255,0.08);
+background:#1e293b;
 
 padding:25px;
 
-border-radius:15px;
+border-radius:12px;
 
-width:92%;
-max-width:420px;
+width:90%;
 
-backdrop-filter:blur(10px);
+max-width:400px;
 
 text-align:center;
 
 }
 
+
 button{
 
 width:100%;
 
-padding:13px;
+padding:12px;
 
 margin-top:12px;
 
@@ -59,15 +59,14 @@ border:none;
 
 border-radius:8px;
 
-background:#00c2cb;
+background:#22c55e;
 
 color:white;
 
 font-size:15px;
 
-cursor:pointer;
-
 }
+
 
 input,select{
 
@@ -83,21 +82,24 @@ border:none;
 
 }
 
+
 img{
 
 width:100%;
 
-border-radius:10px;
-
 margin-top:10px;
+
+border-radius:8px;
 
 }
 
-#photos,#profileBox,#dashboard{
+
+#dashboard,#profileBox{
 
 display:none;
 
 }
+
 
 </style>
 
@@ -107,67 +109,13 @@ display:none;
 <body>
 
 
-<div class="card">
+<div class="card" id="loginPage">
 
 
-<h2>Professional Digital Services</h2>
+<h2>Customer Login</h2>
 
 
-<a href="https://www.instagram.com/_love__tune__">
-
-<button>Instagram Portfolio</button>
-
-</a>
-
-
-
-<h3>Sample Pics</h3>
-
-<button onclick="showPhotos()">View Sample</button>
-
-
-<div id="photos">
-
-<img src="photo1.jpg">
-
-<img src="photo2.jpg">
-
-<img src="photo3.jpg">
-
-</div>
-
-
-
-<h3>Price</h3>
-
-Photo – ₹50<br>
-Poster – ₹80<br>
-Video – ₹150
-
-
-
-<a href="https://wa.me/918056760167">
-
-<button>WhatsApp</button>
-
-</a>
-
-
-
-<h3>UPI</h3>
-
-8056760167@superyes
-
-
-
-<hr>
-
-
-
-<h3>Login</h3>
-
-
-<div id="recaptcha"></div>
+<div id="recaptcha-container"></div>
 
 
 <input placeholder="Mobile Number" id="mobile">
@@ -179,14 +127,17 @@ Video – ₹150
 <input placeholder="Enter OTP" id="otp">
 
 
-<button onclick="verifyOtp()">Verify</button>
+<button onclick="verifyOtp()">Login</button>
+
+
+</div>
 
 
 
-<div id="profileBox">
+<div class="card" id="profileBox">
 
 
-<h3>Profile</h3>
+<h3>Complete Profile</h3>
 
 
 <input placeholder="Name" id="name">
@@ -209,17 +160,17 @@ Video – ₹150
 <input type="file" id="photo">
 
 
-<button onclick="saveProfile()">Save</button>
+<button onclick="saveProfile()">Submit</button>
 
 
 </div>
 
 
 
-<div id="dashboard">
+<div class="card" id="dashboard">
 
 
-<h3>Dashboard</h3>
+<h2>Welcome</h2>
 
 
 <div id="userData"></div>
@@ -228,8 +179,35 @@ Video – ₹150
 <img id="profilePic">
 
 
-</div>
+<hr>
 
+
+<h3>Services</h3>
+
+
+Photo Editing – ₹50<br>
+
+Poster – ₹80<br>
+
+Video – ₹150
+
+
+<br><br>
+
+
+<a href="https://wa.me/918056760167">
+
+<button>Contact WhatsApp</button>
+
+</a>
+
+
+<br>
+
+
+UPI:
+
+8056760167@superyes
 
 
 </div>
@@ -262,10 +240,6 @@ authDomain: "digital-services-otp.firebaseapp.com",
 
 projectId: "digital-services-otp",
 
-storageBucket: "digital-services-otp.firebasestorage.app",
-
-messagingSenderId: "469449627733",
-
 appId: "1:469449627733:web:609b68c8cfddd260859cdc"
 
 };
@@ -276,7 +250,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 
-window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha',{});
+window.recaptchaVerifier =
+
+new RecaptchaVerifier(auth,'recaptcha-container',{});
 
 
 window.sendOtp=function(){
@@ -305,29 +281,23 @@ alert("OTP sent");
 window.verifyOtp=function(){
 
 
-const otp=document.getElementById("otp").value;
+confirmationResult.confirm(
 
+document.getElementById("otp").value
 
-confirmationResult.confirm(otp)
+)
 
 .then(()=>{
+
+
+document.getElementById("loginPage").style.display="none";
 
 
 document.getElementById("profileBox").style.display="block";
 
 
-alert("Login success");
-
-
 });
 
-
-}
-
-
-window.showPhotos=function(){
-
-document.getElementById("photos").style.display="block";
 
 }
 
@@ -340,6 +310,9 @@ let name=document.getElementById("name").value;
 let gender=document.getElementById("gender").value;
 
 let age=document.getElementById("age").value;
+
+
+document.getElementById("profileBox").style.display="none";
 
 
 document.getElementById("dashboard").style.display="block";
