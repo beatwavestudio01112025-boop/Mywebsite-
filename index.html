@@ -130,3 +130,27 @@ Pay via UPI
 
 </body>
 </html>
+
+<h2>Fees Details</h2>
+
+<ul style="text-align:left; display:inline-block;">
+<li>Photo Editing – ₹50</li>
+<li>Poster Design – ₹80</li>
+<li>Video Editing – ₹150</li>
+<li>Thumbnail Design – ₹40</li>
+</ul>
+<h2>Sample Pics</h2>
+
+<button onclick="showPhotos()">View Sample Pics</button>
+
+<div id="photos" style="display:none; margin-top:20px;">
+  <img src="sample1.jpg" width="250">
+  <img src="sample2.jpg" width="250">
+  <img src="sample3.jpg" width="250">
+</div>
+
+<script>
+function showPhotos() {
+  document.getElementById("photos").style.display = "block";
+}
+</script>
